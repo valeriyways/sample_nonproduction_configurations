@@ -1,0 +1,6 @@
+npp_save
+cd $(CURRENT_DIRECTORY)
+cmd /c rmdir /s /q build
+cmd /c mkdir build
+g++ -g3 -std=c99 -pedantic -Wall -Wextra -Wno-nonnull "$(FILE_NAME)" -o "$(CURRENT_DIRECTORY)\build\$(NAME_PART).exe"
+npp_run gdb32 -x run.gdb "$(CURRENT_DIRECTORY)\build\$(NAME_PART).exe"
