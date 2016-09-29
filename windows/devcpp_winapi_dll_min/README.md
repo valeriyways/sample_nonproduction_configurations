@@ -6,3 +6,5 @@ rundll32 dll_project/p3.dll,HelloWorld
 To compile your dll open dll_project project in DevC++ and press F9
 To compile test for your dll open test_dll_project project in DevC++ and press F9
 Results (p3.dll and test_dll.exe) are stored one folder above dll_project and test_dll_project
+
+![Sample output](hello_world_message.jpg)
