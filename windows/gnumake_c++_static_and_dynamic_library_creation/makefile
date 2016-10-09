@@ -1,5 +1,19 @@
+# цель1: зависимость_цель1 зависимость_цель2
+# <таб>команда1
+# <таб>команда2
+# цель2:...
+# ...
+# g++ - компилятор
+# -o <выходной файл>
+# -c - компилировать без линковки. Создаются .o объекты, которые не связаны друг с другом (нужно, чтобы твою библиотеку могли подключить).
+# -I<папка> - уазать папку для включения в проект (#include <...>)
+# -L<папка> - указать папку, где лежат бинарные/объектные файлы объектов .o .a .lib ...
+# -l<файл без "lib" и без ".o"> - объект, который ты линкуешь. ???
+# ar - ненужная утилита для создания промежуточных результатов (объединяет .o файлы в один .a)
+# -r - полезная параметр
+# rmdir - удалить папку в винде
 # [Gnu Make][https://www.gnu.org/software/make/] is terrible, but ok for now :)
-# [C & C++ Compiler]https://sourceforge.net/projects/tdm-gcc/ worked for me
+# [C & C++ Compiler]https://sourceforge.net/projects/tdm-g++/ worked for me
 
 # TO RUN:
 # 1) set PATH=D:\TDM-GCC-32\bin;%PATH%
@@ -13,7 +27,7 @@
 
 .SILENT:
 .PHONY: all clean
-.IGNORE: cleanbin cleanlibstatic cleanlibdynamic cleanobjects
+.IGNORE: cleanbin cleanlibstatic cleanobjects
 
 all: clean compile_src compile_tests run_tests
 
@@ -23,13 +37,10 @@ cleanbin:
 cleanlibstatic:
 	rmdir /s /q static
 
-cleanlibdynamic:
-	rmdir /s /q dynamic
-
 cleanobjects:
 	rmdir /s /q objects
 
-clean: cleanbin cleanlibstatic cleanlibdynamic cleanobjects
+clean: cleanbin cleanlibstatic cleanobjects
 
 bin:
 	mkdir bin
@@ -37,40 +48,17 @@ bin:
 static:
 	mkdir static
 
-dynamic:
-	mkdir dynamic
-
 objects:
 	mkdir objects
 
 # Dependancy on "clean" and "bin" would have been added here
 # if "clean" did not satisfy "bin" target by removing "bin" directory that is needed to store results
-compile_src: compile_static compile_dynamic
+compile_src: static objects src\main\Array1D.cpp src\main\Array1D.h
+	g++ -o objects\libArray1D.o -c src\main\Array1D.cpp
+	ar -r static\libArray1D.a objects\libArray1D.o
 
-lib_sources: src\main\libfun.c src\main\libfun.h
+compile_tests: bin src\test\main.cpp
+	g++ -o bin\main.exe -Isrc\main src\test\main.cpp -Lstatic -lArray1D
 
-compile_static: static objects lib_sources
-	gcc -o objects\libfun_static.o -c src\main\libfun.c
-	ar -r static\libfun.a objects\libfun_static.o
-
-# -Werror # <<< break compilation because "-fpic ignored (all code is position independent)"
-# -soname,libfun.so.0,-rpath,../dynamic # <<< for linux
-compile_dynamic: dynamic objects lib_sources
-	gcc -c src\main\libfun.c -Wall -fpic -o objects\libfun_dynamic.o
-	gcc -shared objects\libfun_dynamic.o -o dynamic\libfun.dll.0.0.1
-
-compile_tests: compile_test_static compile_test_dynamic
-
-compile_test_static: bin src\test\test_static.c
-	gcc -o bin\test_static -Isrc\main src\test\test_static.c -Lstatic -lfun
-
-compile_test_dynamic: bin src\test\test_dynamic.c
-	gcc -o bin\test_dynamic -Wall src\test\test_dynamic.c
-
-run_tests: run_test_static run_test_dynamic
-
-run_test_static: bin\test_static.exe
-	bin\test_static.exe
-
-run_test_dynamic: bin\test_dynamic.exe dynamic\libfun.dll.0.0.1
-	bin\test_dynamic.exe
+run_tests: bin\main.exe
+	bin\main.exe
