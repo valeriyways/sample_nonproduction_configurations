@@ -7,3 +7,5 @@
 https://docs.google.com/document/d/1gBLG3YKjdHd9WnPTO7px1WcSwwQlYfi26PeHlD3Sa68/edit?usp=sharing
 
 ![Это - скриншот рабочего стала с Notepad++ IDE, папками компилятора, make утилиты и открытым сайтом проекта](workspace.JPG)
+
+[Valleriyways draft logo](valeriyways.stl)
