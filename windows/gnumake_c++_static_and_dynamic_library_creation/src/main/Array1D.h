@@ -7,6 +7,7 @@ class Array1D {
     
   public:
     Array1D(int);
+    ~Array1D();
     void printArray1D();
     void insertSortArray1D();
     bool searchElement_in_Array1D(int);
