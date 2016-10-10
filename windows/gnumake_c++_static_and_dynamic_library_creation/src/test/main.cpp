@@ -70,6 +70,7 @@ int main(int argc, char **argv) {
             case 6: goto programExit;break;
             default:
                 // http://stackoverflow.com/questions/15826188/what-most-correct-way-to-set-the-encoding-in-c
+                setlocale(LC_ALL,"Russian"); // One smart guy gave it to me, it worked on my Windows 10, haven't tested on XP.
                 cout << "я тебя не понимаю, переведи на английский" << endl;
                 break;
         }
